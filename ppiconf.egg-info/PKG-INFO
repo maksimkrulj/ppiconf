@@ -1,0 +1,27 @@
+Metadata-Version: 2.4
+Name: ppiconf
+Version: 0.1.0
+Summary: Deterministic configuration for Dockerized apps
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: pydantic-settings>=2.0.0
+Requires-Dist: pyyaml>=6.0.0
+
+# ppiconf 🛠️
+
+**ppiconf** (Python Project Intelligent Config) je strogo tipizirana biblioteka za upravljanje konfiguracijom, dizajnirana posebno za Dockerizovane aplikacije. Rešava problem konfiguracije "jednom zauvek" koristeći Pydantic za validaciju i deterministički pristup za punu IDE podršku (autocomplete).
+
+## Glavne prednosti
+ **Single Source of Truth**: Konfiguracija se definiše u kodu (Python klase).
+ **Type Safety**: IDE prepoznaje svako polje. Zaboravi na nagađanje naziva iz `.env` fajlova.
+ **Fail-Fast**: Aplikacija se gasi pri startu ako konfiguracija nije ispravna.
+ **Docker Optimized**: Podržava `ENV_YAML` za masovno učitavanje i standardne environment varijable za specifične override-ove.
+
+---
+
+## Instalacija
+
+Dok si u korenom folderu projekta, instaliraj ga lokalno:
+```bash
+pip install -e .

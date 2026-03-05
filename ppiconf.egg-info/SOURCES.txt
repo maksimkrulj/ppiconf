@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+ppiconf/__init__.py
+ppiconf/main.py
+ppiconf.egg-info/PKG-INFO
+ppiconf.egg-info/SOURCES.txt
+ppiconf.egg-info/dependency_links.txt
+ppiconf.egg-info/entry_points.txt
+ppiconf.egg-info/requires.txt
+ppiconf.egg-info/top_level.txt
