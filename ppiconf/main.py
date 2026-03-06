@@ -25,17 +25,11 @@ class DbConfig(BaseModel):
     password: str = "secret"
 
 class Settings(BaseSettings):
-    """
-    Glavna klasa za podešavanja. 
-    Pydantic Settings automatski mapira environment varijable.
-    Primer: DB__PORT će pregaziti db.port vrednost.
-    """
     model_config = SettingsConfigDict(
         env_nested_delimiter="__", 
         env_file=".env",
         extra="ignore"
     )
-
     app_env: Literal["dev", "prod", "test"] = "dev"
     debug: bool = False
     db: DbConfig = DbConfig()
@@ -43,7 +37,7 @@ class Settings(BaseSettings):
 
     
     def is_env(self, env_name: str) -> bool:
-        """Proverava trenutno okruženje"""
+        
         return self.app_env == env_name
 
     @classmethod
@@ -57,32 +51,31 @@ class Settings(BaseSettings):
                 with open(path, "r") as f:
                     yaml_data = yaml.safe_load(f) or {}
             else:
-                print(f" UPOZORENJE: ENV_YAML je setovan na {yaml_path}, ali fajl ne postoji.")
+                print(f" Warning : ENV_YAML is set at {yaml_path}, but the file doesnt exist.")
 
         try:
             
             return cls(**yaml_data)
         except ValidationError as e:
-            print("\n [PPICONF] Kritična greška u konfiguraciji:")
+            print("\n [PPICONF] Fatal error in configuration:")
             for error in e.errors():
                 loc = " -> ".join(str(v) for v in error["loc"])
                 print(f"    {loc}: {error['msg']} (Dobijeno: {error['input']})")
             sys.exit(1)
 
     def reload(self):
-        """Osvežava konfiguraciju u runtime-u"""
         new_instance = self.load()
         for field in self.model_fields:
             setattr(self, field, getattr(new_instance, field))
-        print("🔄 [PPICONF] Konfiguracija je uspešno osvežena.")
+        print("[PPICONF] Configuration has been refreshed.")
 
 
 config = Settings.load()
 
 
 def cli_generate():
-    """Generiše template fajlove za kolege"""
-    print("Generisanje konfiguracionih primera...")
+    
+    print("Generating conf examples...")
     
     
     with open("config.example.yaml", "w") as f:
@@ -98,7 +91,7 @@ def cli_generate():
             else:
                 f.write(f"{k.upper()}={v}\n")
     
-    print("Kreirani: config.example.yaml i .env.example")
+    print("Created: config.example.yaml and .env.example")
 
 def setup_logger():
     """Logger settings"""
@@ -106,16 +99,14 @@ def setup_logger():
         level=config.logging.level,
         format=config.logging.format,
         handlers=[
-            logging.StreamHandler(), # Uvek piši u konzolu (Docker standard)
+            logging.StreamHandler(), 
         ]
     )
-    
-    # Ako je u configu uključeno logovanje u fajl
+     
     if config.logging.log_to_file:
         file_handler = logging.FileHandler(config.logging.file_path)
         logging.getLogger().addHandler(file_handler)
         
-    logging.info(f"Logger podešen na nivo: {config.logging.level}")
+    logging.info(f"Logger set at level : {config.logging.level}")
 
-# Pozoveš je odmah ispod inicijalizacije configa
 setup_logger()
