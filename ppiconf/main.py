@@ -15,8 +15,8 @@ class LoggingConfig(BaseModel):
     log_to_file: bool = False
     file_path : Optional [str] = "app.log"
 
-class Settings(BaseSettings):
-    logging : LoggingConfig = LoggingConfig()
+
+    
 
 class DbConfig(BaseModel):
     host: str = "127.0.0.1"
@@ -30,10 +30,14 @@ class Settings(BaseSettings):
         env_file=".env",
         extra="ignore"
     )
+    
     app_env: Literal["dev", "prod", "test"] = "dev"
     debug: bool = False
-    db: DbConfig = DbConfig()
     api_key: Optional[str] = None
+    
+    
+    db: DbConfig = DbConfig()
+    logging: LoggingConfig = LoggingConfig()
 
     
     def is_env(self, env_name: str) -> bool:
