@@ -1,4 +1,9 @@
 from .main import config, Settings
 
-# Ovdje definišeš šta se sve izvozi kada neko uradi "from ppiconf import *"
+__version__ = "0.1.0"
+
 __all__ = ["config", "Settings"]
+
+"""
+ppiconf - Deterministic configuration management for Python & Docker.
+"""
